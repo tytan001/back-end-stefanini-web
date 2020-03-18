@@ -11,6 +11,7 @@ import javax.ejb.*;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,8 @@ public class PerfilServico implements Serializable {
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Perfil salvar(@Valid Perfil perfil) {
+		perfil.setDataHoraInclusao(LocalDateTime.now());
+		perfil.setDataHoraAlteracao(LocalDateTime.now());
 		return dao.salvar(perfil);
 	}
 
@@ -59,8 +62,9 @@ public class PerfilServico implements Serializable {
 	 * Atualizar o dados de uma perfil
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Perfil atualizar(@Valid Perfil entity) {
-		return dao.atualizar(entity);
+	public Perfil atualizar(@Valid Perfil perfil) {
+		perfil.setDataHoraAlteracao(LocalDateTime.now());
+		return dao.atualizar(perfil);
 	}
 
 	/**
