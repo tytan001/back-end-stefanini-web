@@ -83,6 +83,13 @@ public class PessoaServico implements Serializable {
 	public Optional<List<Pessoa>> getList() {
 		return dao.getList();
 	}
+	
+	/**
+	 * Buscar uma lista de Pessoa de forma mais otimizada
+	 */
+	public Optional<List<Pessoa>> getListOtimizada() {
+		return Optional.of(dao.buscaOtimizada());
+	}
 
 	/**
 	 * Buscar uma Pessoa pelo ID

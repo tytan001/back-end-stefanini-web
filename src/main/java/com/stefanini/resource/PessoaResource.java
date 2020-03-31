@@ -42,7 +42,8 @@ public class PessoaResource {
 	public Response obterPessoas() {
 		log.info("Obtendo lista de pessoas");
 		MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
-		Optional<List<Pessoa>> listPessoa = pessoaServico.getList();
+//		Optional<List<Pessoa>> listPessoa = pessoaServico.getList();
+		Optional<List<Pessoa>> listPessoa = pessoaServico.getListOtimizada();
 		return listPessoa.map(pessoas -> Response.ok(pessoas).build()).orElseGet(() -> Response.status(Status.NOT_FOUND).build());
 
 	}
