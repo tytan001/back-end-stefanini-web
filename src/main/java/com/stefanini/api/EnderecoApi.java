@@ -1,4 +1,4 @@
-package api;
+package com.stefanini.api;
 
 import java.io.BufferedReader;
 import java.io.IOException;

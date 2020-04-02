@@ -3,8 +3,6 @@ package com.stefanini.servico;
 import com.stefanini.dao.EnderecoDao;
 import com.stefanini.model.Endereco;
 
-import api.EnderecoApi;
-
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -60,7 +58,6 @@ public class EnderecoServico implements Serializable {
 	}
 	
 	public String buscarCep(String cep) {
-//		return api.buscarCep(cep);
 		String json;
 		
 		try {
