@@ -29,10 +29,6 @@ public class EnderecoServico implements Serializable {
 	
 	@Inject
 	private EnderecoDao dao;
-	
-	@Inject
-	private EnderecoApi api;
-
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Endereco salvar(@Valid Endereco entity) {
