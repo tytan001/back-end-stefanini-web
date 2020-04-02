@@ -32,13 +32,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 @Entity
 @Table(name = "TB_PESSOA")
 @NamedQuery(name = "Pessoa.findPerfilsAndEnderecosByNome", query = "SELECT p FROM Pessoa p LEFT JOIN FETCH p.enderecos LEFT JOIN FETCH p.perfils ORDER BY p.nome")
-public class Pessoa implements Serializable{
+public class Pessoa implements Serializable {
 
-	
 	/**
 	 * Serializacao da Classe
 	 */
 	private static final long serialVersionUID = 1L;
+
 	/**
 	 * ID da Tabela
 	 */
@@ -46,25 +46,28 @@ public class Pessoa implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "CO_SEQ_PESSOA")
 	private Long id;
+
 	/**
 	 * Nome da pessoa
 	 */
 	@NotNull
 	@Column(name = "NO_NOME")
 	private String nome;
-	
+
 	/**
 	 * Email da Pessoa
 	 */
 	@NotNull
 	@Column(name = "DS_EMAIL")
 	private String email;
+
 	/**
-	 * Data de Nascimento 
+	 * Data de Nascimento
 	 */
 	@NotNull
 	@Column(name = "DT_NASCIMENTO")
-	private LocalDate dataNascimento; 
+	private LocalDate dataNascimento;
+
 	/**
 	 * Situacao da Pessoa
 	 */
@@ -73,29 +76,32 @@ public class Pessoa implements Serializable{
 	private Boolean situacao;
 
 	/**
+	 * Caminho da imagem
+	 */
+	@Column(name = "DS_CAMINHO_IMAGEM")
+	private String caminhoImagem;
+
+	/**
 	 * Mapeamento de Enderecos Unidirecional
 	 */
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name = "CO_SEQ_PESSOA",referencedColumnName = "CO_SEQ_PESSOA")
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "CO_SEQ_PESSOA", referencedColumnName = "CO_SEQ_PESSOA")
 	private Set<Endereco> enderecos = new HashSet<>();
 
 	/**
 	 * Mapeamento de Perfis Unidirecional
 	 */
-	@ManyToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinTable(
-			name = "TB_PESSOA_PERFIL",
-			joinColumns = {@JoinColumn(name = "CO_SEQ_PESSOA")},
-			inverseJoinColumns = {@JoinColumn(name = "CO_SEQ_PERFIL")}
-	)
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinTable(name = "TB_PESSOA_PERFIL", joinColumns = { @JoinColumn(name = "CO_SEQ_PESSOA") }, inverseJoinColumns = {
+			@JoinColumn(name = "CO_SEQ_PERFIL") })
 	private Set<Perfil> perfils = new HashSet<>();
+
 	/**
 	 * Metodo construtor da classe
 	 */
 	public Pessoa() {
 	}
-
 
 	public Set<Perfil> getPerfils() {
 		return perfils;
@@ -107,19 +113,20 @@ public class Pessoa implements Serializable{
 
 	/**
 	 * Construtor da Classe, Obrigando receber todos os parametros
+	 * 
 	 * @param nome
 	 * @param email
 	 * @param dataNascimento
 	 * @param situacao
 	 */
-	public Pessoa(@NotNull String nome, @NotNull String email, @NotNull LocalDate dataNascimento,@NotNull Boolean situacao) {
+	public Pessoa(@NotNull String nome, @NotNull String email, @NotNull LocalDate dataNascimento,
+			@NotNull Boolean situacao) {
 		super();
 		this.nome = nome;
 		this.email = email;
 		this.dataNascimento = dataNascimento;
 		this.situacao = situacao;
 	}
-
 
 	public Set<Endereco> getEnderecos() {
 		return enderecos;
@@ -128,7 +135,6 @@ public class Pessoa implements Serializable{
 	public void setEnderecos(Set<Endereco> enderecos) {
 		this.enderecos = enderecos;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -154,8 +160,6 @@ public class Pessoa implements Serializable{
 		this.dataNascimento = dataNascimento;
 	}
 
-
-
 	public String getEmail() {
 		return email;
 	}
@@ -170,6 +174,14 @@ public class Pessoa implements Serializable{
 
 	public void setSituacao(Boolean situacao) {
 		this.situacao = situacao;
+	}
+
+	public String getCaminhoImagem() {
+		return caminhoImagem;
+	}
+
+	public void setCaminhoImagem(String caminhoImagem) {
+		this.caminhoImagem = caminhoImagem;
 	}
 
 	@Override
@@ -202,13 +214,5 @@ public class Pessoa implements Serializable{
 		return "Pessoa [id=" + id + ", nome=" + nome + ", email=" + email + ", dataNascimento=" + dataNascimento
 				+ ", situacao=" + situacao + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
