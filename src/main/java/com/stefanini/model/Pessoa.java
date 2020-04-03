@@ -127,6 +127,18 @@ public class Pessoa implements Serializable {
 		this.dataNascimento = dataNascimento;
 		this.situacao = situacao;
 	}
+	
+	public Pessoa(Long id, @NotNull String nome, @NotNull String email, @NotNull LocalDate dataNascimento,
+			@NotNull Boolean situacao, Set<Endereco> enderecos, Set<Perfil> perfils) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.dataNascimento = dataNascimento;
+		this.situacao = situacao;
+		this.enderecos = enderecos;
+		this.perfils = perfils;
+	}
 
 	public Set<Endereco> getEnderecos() {
 		return enderecos;

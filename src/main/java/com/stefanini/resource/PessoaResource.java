@@ -1,6 +1,7 @@
 package com.stefanini.resource;
 
 import com.stefanini.dto.ErroDto;
+import com.stefanini.dto.PessoaDto;
 import com.stefanini.dto.SucessoDto;
 import com.stefanini.exception.NegocioException;
 import com.stefanini.model.Pessoa;
@@ -54,7 +55,12 @@ public class PessoaResource {
 	 * @return
 	 */
 	@POST
-	public Response adicionarPessoa(@Valid Pessoa pessoa) {
+	public Response adicionarPessoa(@Valid PessoaDto dto) {
+		System.out.println("\nChegou aqui");
+		System.out.println("\n=============================================================\n");
+		System.out.println(dto.toString());
+		Pessoa pessoa = pessoaServico.toPessoa(dto);
+		
 		if(pessoaServico.validarPessoa(pessoa)){
 			return Response.ok(pessoaServico.salvar(pessoa)).build();
 		}
@@ -68,7 +74,9 @@ public class PessoaResource {
 	 * @return
 	 */
 	@PUT
-	public Response atualizarPessoa(@Valid Pessoa pessoa) {
+	public Response atualizarPessoa(@Valid PessoaDto dto) {
+		Pessoa pessoa = pessoaServico.toPessoa(dto);
+		
 		if(pessoaServico.validarPessoa(pessoa)){
 			return Response.ok(pessoaServico.atualizar(pessoa)).build();
 		}

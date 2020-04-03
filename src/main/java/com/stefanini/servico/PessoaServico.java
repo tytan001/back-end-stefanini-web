@@ -1,6 +1,7 @@
 package com.stefanini.servico;
 
 import com.stefanini.dao.PessoaDao;
+import com.stefanini.dto.PessoaDto;
 import com.stefanini.exception.NegocioException;
 import com.stefanini.model.Pessoa;
 
@@ -97,6 +98,11 @@ public class PessoaServico implements Serializable {
 //	@Override
 	public Optional<Pessoa> encontrar(Long id) {
 		return dao.encontrar(id);
+	}
+	
+	public Pessoa toPessoa(PessoaDto dto) {
+		return new Pessoa(dto.getId(), dto.getNome(), dto.getEmail(), dto.getDataNascimento(), dto.getSituacao(), dto.getEnderecos(), dto.getPerfils());
+		
 	}
 
 }
