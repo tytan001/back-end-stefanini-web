@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
  */
 @Entity
 @Table(name = "TB_PESSOA")
-@NamedQuery(name = "Pessoa.findPerfilsAndEnderecosByNome", query = "SELECT p FROM Pessoa p LEFT JOIN FETCH p.enderecos LEFT JOIN FETCH p.perfils ORDER BY p.nome")
+@NamedQuery(name = "Pessoa.findPerfilsAndEnderecosByNome", query = "SELECT DISTINCT p FROM Pessoa p LEFT JOIN FETCH p.enderecos LEFT JOIN FETCH p.perfils ORDER BY p.nome")
 public class Pessoa implements Serializable {
 
 	/**
