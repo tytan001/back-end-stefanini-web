@@ -39,6 +39,8 @@ public class PessoaServico implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private final String pathFileBase = "C:\\Users\\dev\\Documents\\stefanini\\imagens\\";
+
 	@Inject
 	private PessoaDao dao;
 
@@ -49,8 +51,8 @@ public class PessoaServico implements Serializable {
 	 * Salvar os dados de uma Pessoa
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Pessoa salvar(@Valid Pessoa pessoa) {
-		return dao.salvar(pessoa);
+	public PessoaDto salvar(@Valid Pessoa pessoa) {
+		return toPessoaDTO(dao.salvar(pessoa));
 	}
 
 	/**
@@ -71,8 +73,8 @@ public class PessoaServico implements Serializable {
 	 * Atualizar o dados de uma pessoa
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Pessoa atualizar(@Valid Pessoa entity) {
-		return dao.atualizar(entity);
+	public PessoaDto atualizar(@Valid Pessoa entity) {
+		return toPessoaDTO(dao.atualizar(entity));
 	}
 
 	/**
@@ -110,8 +112,9 @@ public class PessoaServico implements Serializable {
 	 * Buscar uma Pessoa pelo ID
 	 */
 //	@Override
-	public Optional<Pessoa> encontrar(Long id) {
-		return dao.encontrar(id);
+	public Optional<PessoaDto> encontrar(Long id) {
+		Optional<Pessoa> pessoa = dao.encontrar(id);
+		return Optional.of(toPessoaDTO(pessoa.get()));
 	}
 
 	/**
@@ -129,8 +132,12 @@ public class PessoaServico implements Serializable {
 	public PessoaDto toPessoaDTO(Pessoa pessoa) {
 		PessoaDto pessoaDto = new PessoaDto(pessoa.getId(), pessoa.getNome(), pessoa.getEmail(),
 				pessoa.getDataNascimento(), pessoa.getSituacao(), pessoa.getEnderecos(), pessoa.getPerfils());
-		if (pessoa.getCaminhoImagem() != null)
-			pessoaDto.setImagem(new Imagem("", "image/jpeg", getImageBase64(pessoa.getCaminhoImagem())));
+		if (pessoa.getCaminhoImagem() != null) {
+			String nomeImagem = getNameImage(pessoa.getCaminhoImagem());
+			pessoaDto.setImagem(
+					new Imagem(nomeImagem, getTipoImage(nomeImagem), getImageBase64(pessoa.getCaminhoImagem())));
+		} else
+			pessoaDto.setImagem(new Imagem());
 		return pessoaDto;
 
 	}
@@ -139,7 +146,7 @@ public class PessoaServico implements Serializable {
 	 * Metodo de salvar a imagem e retorna o local onde foi salva
 	 */
 	public String saveImage(String name, String base64) {
-		String pathFile = "C:\\Users\\dev\\Documents\\stefanini\\imagens\\" + name;
+		String pathFile = pathFileBase + name;
 		try {
 			FileOutputStream imageOutFile = new FileOutputStream(pathFile);
 			byte[] imageByteArray = Base64.getDecoder().decode(base64);
@@ -172,6 +179,35 @@ public class PessoaServico implements Serializable {
 			System.out.println("Exception while reading the Image " + ioe);
 		}
 		return base64Image;
+	}
+
+	/**
+	 * Metodo de pegar o nome da imagem salvo no path onde foi salva
+	 */
+	private String getNameImage(String imagePath) {
+		return imagePath != null ? imagePath.replace(pathFileBase, "") : "";
+	}
+
+	/**
+	 * Metodo de pegar o tipo da imagem com base no nome dela
+	 */
+	private String getTipoImage(String nameImage) {
+		String retorno = "";
+		String[] textoSeparado = nameImage.split("\\.");
+
+		if (textoSeparado != null && textoSeparado.length != 0)
+			switch (textoSeparado[textoSeparado.length - 1]) {
+			case "jpg":
+				retorno = "image/jpeg";
+				break;
+			case "png":
+				retorno = "image/png";
+				break;
+			default:
+				retorno = "image/" + textoSeparado[textoSeparado.length - 1];
+			}
+
+		return retorno;
 	}
 
 }

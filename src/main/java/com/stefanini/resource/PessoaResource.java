@@ -57,7 +57,8 @@ public class PessoaResource {
 	@POST
 	public Response adicionarPessoa(@Valid PessoaDto dto) {
 		Pessoa pessoa = pessoaServico.toPessoa(dto);
-		pessoa.setCaminhoImagem(pessoaServico.saveImage(dto.getImagem().getNome(), dto.getImagem().getBase64()));
+		if(dto.getImagem() != null && dto.getImagem().getNome() != null && dto.getImagem().getBase64() != null)
+			pessoa.setCaminhoImagem(pessoaServico.saveImage(dto.getImagem().getNome(), dto.getImagem().getBase64()));
 
 		if (pessoaServico.validarPessoa(pessoa)) {
 			return Response.ok(pessoaServico.salvar(pessoa)).build();
@@ -74,7 +75,8 @@ public class PessoaResource {
 	@PUT
 	public Response atualizarPessoa(@Valid PessoaDto dto) {
 		Pessoa pessoa = pessoaServico.toPessoa(dto);
-		pessoa.setCaminhoImagem(pessoaServico.saveImage(dto.getImagem().getNome(), dto.getImagem().getBase64()));
+		if(dto.getImagem() != null && dto.getImagem().getNome() != null && dto.getImagem().getBase64() != null)
+			pessoa.setCaminhoImagem(pessoaServico.saveImage(dto.getImagem().getNome(), dto.getImagem().getBase64()));
 
 		if (pessoaServico.validarPessoa(pessoa)) {
 			return Response.ok(pessoaServico.atualizar(pessoa)).build();
@@ -112,7 +114,7 @@ public class PessoaResource {
 	@GET
 	@Path("{id}")
 	public Response obterPessoa(@PathParam("id") Long id) {
-		return pessoaServico.encontrar(id).map(pessoas -> Response.ok(pessoas).build())
+		return pessoaServico.encontrar(id).map(pessoasDto -> Response.ok(pessoasDto).build())
 				.orElseGet(() -> Response.status(Status.NOT_FOUND).build());
 	}
 
