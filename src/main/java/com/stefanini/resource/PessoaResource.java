@@ -34,7 +34,6 @@ public class PessoaResource {
 	@Context
 	private UriInfo uriInfo;
 
-
 	/**
 	 *
 	 * @return
@@ -44,8 +43,9 @@ public class PessoaResource {
 		log.info("Obtendo lista de pessoas");
 		MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 //		Optional<List<Pessoa>> listPessoa = pessoaServico.getList();
-		Optional<List<Pessoa>> listPessoa = pessoaServico.getListOtimizada();
-		return listPessoa.map(pessoas -> Response.ok(pessoas).build()).orElseGet(() -> Response.status(Status.NOT_FOUND).build());
+		Optional<List<PessoaDto>> listPessoa = pessoaServico.getListOtimizada();
+		return listPessoa.map(pessoasDto -> Response.ok(pessoasDto).build())
+				.orElseGet(() -> Response.status(Status.NOT_FOUND).build());
 
 	}
 
@@ -56,17 +56,15 @@ public class PessoaResource {
 	 */
 	@POST
 	public Response adicionarPessoa(@Valid PessoaDto dto) {
-		System.out.println("\nChegou aqui");
-		System.out.println("\n=============================================================\n");
-		System.out.println(dto.toString());
 		Pessoa pessoa = pessoaServico.toPessoa(dto);
-		
-		if(pessoaServico.validarPessoa(pessoa)){
+		pessoa.setCaminhoImagem(pessoaServico.saveImage(dto.getImagem().getNome(), dto.getImagem().getBase64()));
+
+		if (pessoaServico.validarPessoa(pessoa)) {
 			return Response.ok(pessoaServico.salvar(pessoa)).build();
 		}
-		return Response.status(Status.METHOD_NOT_ALLOWED).entity(new ErroDto("email","email já existe", pessoa.getEmail())).build();
+		return Response.status(Status.METHOD_NOT_ALLOWED)
+				.entity(new ErroDto("email", "email já existe", pessoa.getEmail())).build();
 	}
-
 
 	/**
 	 *
@@ -76,13 +74,14 @@ public class PessoaResource {
 	@PUT
 	public Response atualizarPessoa(@Valid PessoaDto dto) {
 		Pessoa pessoa = pessoaServico.toPessoa(dto);
-		
-		if(pessoaServico.validarPessoa(pessoa)){
+		pessoa.setCaminhoImagem(pessoaServico.saveImage(dto.getImagem().getNome(), dto.getImagem().getBase64()));
+
+		if (pessoaServico.validarPessoa(pessoa)) {
 			return Response.ok(pessoaServico.atualizar(pessoa)).build();
 		}
-		return Response.status(Status.METHOD_NOT_ALLOWED).entity(new ErroDto("email","email já existe", pessoa.getEmail())).build();
+		return Response.status(Status.METHOD_NOT_ALLOWED)
+				.entity(new ErroDto("email", "email já existe", pessoa.getEmail())).build();
 	}
-
 
 	/**
 	 *
@@ -92,18 +91,18 @@ public class PessoaResource {
 	@DELETE
 	@Path("{id}")
 	public Response deletarPessoa(@PathParam("id") Long id) {
-		try{
-			if(pessoaServico.encontrar(id).isPresent()){
+		try {
+			if (pessoaServico.encontrar(id).isPresent()) {
 				pessoaServico.remover(id);
 				return Response.status(Response.Status.OK).build();
-			}else {
+			} else {
 				return Response.status(Response.Status.NOT_FOUND).build();
 			}
 		} catch (NegocioException e) {
-			return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity(new ErroDto(null,e.getMensagem(),id)).build();
+			return Response.status(Response.Status.METHOD_NOT_ALLOWED).entity(new ErroDto(null, e.getMensagem(), id))
+					.build();
 		}
 	}
-
 
 	/**
 	 *
@@ -113,7 +112,8 @@ public class PessoaResource {
 	@GET
 	@Path("{id}")
 	public Response obterPessoa(@PathParam("id") Long id) {
-		return pessoaServico.encontrar(id).map(pessoas -> Response.ok(pessoas).build()).orElseGet(() -> Response.status(Status.NOT_FOUND).build());
+		return pessoaServico.encontrar(id).map(pessoas -> Response.ok(pessoas).build())
+				.orElseGet(() -> Response.status(Status.NOT_FOUND).build());
 	}
 
 }

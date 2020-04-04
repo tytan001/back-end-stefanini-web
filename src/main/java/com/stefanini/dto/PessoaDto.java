@@ -24,6 +24,18 @@ public class PessoaDto implements Serializable {
 	private Set<Perfil> perfils = new HashSet<>();
 	private Imagem imagem;
 
+	public PessoaDto(Long id, String nome, String email, LocalDate dataNascimento, Boolean situacao,
+			Set<Endereco> enderecos, Set<Perfil> perfils) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.dataNascimento = dataNascimento;
+		this.situacao = situacao;
+		this.enderecos = enderecos;
+		this.perfils = perfils;
+	}
+
 	public Long getId() {
 		return id;
 	}
