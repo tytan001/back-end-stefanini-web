@@ -92,7 +92,7 @@ public class Pessoa implements Serializable {
 	/**
 	 * Mapeamento de Perfis Unidirecional
 	 */
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
 	@JoinTable(name = "TB_PESSOA_PERFIL", joinColumns = { @JoinColumn(name = "CO_SEQ_PESSOA") }, inverseJoinColumns = {
 			@JoinColumn(name = "CO_SEQ_PERFIL") })
 	private Set<Perfil> perfils = new HashSet<>();
@@ -128,6 +128,17 @@ public class Pessoa implements Serializable {
 		this.situacao = situacao;
 	}
 	
+	public Pessoa(@NotNull String nome, @NotNull String email, @NotNull LocalDate dataNascimento,
+			@NotNull Boolean situacao, String caminhoImagem, Set<Perfil> perfils) {
+		super();
+		this.nome = nome;
+		this.email = email;
+		this.dataNascimento = dataNascimento;
+		this.situacao = situacao;
+		this.caminhoImagem = caminhoImagem;
+		this.perfils = perfils;
+	}
+
 	public Pessoa(Long id, @NotNull String nome, @NotNull String email, @NotNull LocalDate dataNascimento,
 			@NotNull Boolean situacao, Set<Endereco> enderecos, Set<Perfil> perfils) {
 		super();

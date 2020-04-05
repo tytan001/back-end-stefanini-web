@@ -45,5 +45,30 @@ public class PessoaDao extends GenericDao<Pessoa, Long> {
 		return query.getResultList();
 	
 	}
+	
+	public Pessoa salvarEntity(Pessoa pessoaDto) {
+		Pessoa pessoa = new Pessoa(
+				pessoaDto.getNome(),
+				pessoaDto.getEmail(),
+				pessoaDto.getDataNascimento(),
+				pessoaDto.getSituacao(),
+				pessoaDto.getCaminhoImagem(),
+				pessoaDto.getPerfils());
+
+		this.getEntityManager().persist(pessoa);
+
+		if(pessoaDto.getEnderecos() != null) {
+			pessoaDto.getEnderecos().forEach(x -> {
+				x.setIdPessoa(pessoa.getId());
+				try {
+					this.getEntityManager().persist(x);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+		}
+
+		return pessoa;
+	}
 
 }

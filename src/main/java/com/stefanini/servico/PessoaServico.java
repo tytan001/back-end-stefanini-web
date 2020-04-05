@@ -52,7 +52,7 @@ public class PessoaServico implements Serializable {
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public PessoaDto salvar(@Valid Pessoa pessoa) {
-		return toPessoaDTO(dao.salvar(pessoa));
+		return toPessoaDTO(dao.salvarEntity(pessoa));
 	}
 
 	/**
